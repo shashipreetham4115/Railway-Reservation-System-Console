@@ -6,23 +6,24 @@ import java.util.Scanner;
 
 import Entites.Ticket;
 import Entites.Train;
-import Interfaces.BookingServices;
+import Utilities.Inputs;
 
-public class App extends BookingSoftware implements BookingServices {
+public class App extends BookingSoftware {
 	Scanner sc = new Scanner(System.in);
 
 	public void BookTicket(String role) {
-		String start = GetLine("Enter From Station").toUpperCase();
-		String end = GetLine("Enter To Station").toUpperCase();
-		String date = GetString("Enter Date");
+		String start = Inputs.GetLine("Enter From Station").toUpperCase();
+		String end = Inputs.GetLine("Enter To Station").toUpperCase();
+		String date = Inputs.GetString("Enter Date");
 		Ticket t = null;
 		if (PrintTrains(start, end, date))
 			if (ValidateTrainID()) {
-				String pb = GetString("Please Enter Your Prefered Berth (UB,MB,LB,SU)").toUpperCase();
+				String pb = Inputs.GetString("Please Enter Your Prefered Berth (UB,MB,LB,SU)").toUpperCase();
 				if (role.equals("User"))
 					t = BookTicket(Login.getLoggedInUser().name, Login.getLoggedInUser().age, start, end, pb);
 				else
-					t = BookTicket(GetLine("Please Enter Name"), GetInt("Please Enter Age"), start, end, pb);
+					t = BookTicket(Inputs.GetLine("Please Enter Name"), Inputs.GetInt("Please Enter Age"), start, end,
+							pb);
 			} else
 				return;
 		else
@@ -57,7 +58,7 @@ public class App extends BookingSoftware implements BookingServices {
 
 	boolean ValidateTrainID() {
 		while (true) {
-			long train_id = GetLong("Please Enter Train Number from Above List or enter -1 to exit");
+			long train_id = Inputs.GetLong("Please Enter Train Number from Above List or enter -1 to exit");
 			if (train_id == -1)
 				break;
 			if (ValidateTrainID(train_id)) {
@@ -84,7 +85,7 @@ public class App extends BookingSoftware implements BookingServices {
 	}
 
 	public void CancelTicket() {
-		if (CancelTicket(GetLong("Please Enter Ticket ID")))
+		if (CancelTicket(Inputs.GetLong("Please Enter Ticket ID")))
 			System.out.println("\nSuccessfully Canceled Ticket");
 		else
 			System.out.println("\nFailed To Cancel Your Ticket Please Try Again");
@@ -112,27 +113,6 @@ public class App extends BookingSoftware implements BookingServices {
 		}
 		System.out.println(
 				"\n------------------------------------------------------------------------------------------------------------------------------\n");
-	}
-
-	public int GetInt(String request) {
-		System.out.print("\n" + request + " : ");
-		return sc.nextInt();
-	}
-
-	public String GetString(String request) {
-		System.out.print("\n" + request + " : ");
-		return sc.next();
-	}
-
-	public String GetLine(String request) {
-		sc.nextLine();
-		System.out.print("\n" + request + " : ");
-		return sc.nextLine();
-	}
-
-	public long GetLong(String request) {
-		System.out.print("\n" + request + " : ");
-		return sc.nextLong();
 	}
 
 }

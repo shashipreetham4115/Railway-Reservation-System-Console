@@ -43,7 +43,7 @@ public class RailwayApp extends App implements RailwayAppServices {
 	}
 
 	public void PrintTicket() {
-		PrintTicket(GetLong("Please Enter Your Ticket ID"));
+		PrintTicket(Inputs.GetLong("Please Enter Your Ticket ID"));
 	}
 
 	public void GetChart() {
