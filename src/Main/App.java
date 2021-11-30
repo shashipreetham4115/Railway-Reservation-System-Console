@@ -8,8 +8,10 @@ import Entites.Train;
 import Utilities.Inputs;
 
 public class App extends BookingSoftware {
-	
-	
+
+	// Overrides BookTicket method of BookingSoftware because before booking ticket
+	// needs to get all inputs. So, here it will Taking all required inputs for
+	// booking ticket
 	public void BookTicket(String role) {
 		String start = Inputs.GetLine("Enter From Station").toUpperCase();
 		String end = Inputs.GetLine("Enter To Station").toUpperCase();
@@ -35,6 +37,8 @@ public class App extends BookingSoftware {
 		}
 	}
 
+	// This Function will Print all Trains Available for the given start,
+	// destination and date.
 	public boolean PrintTrains(String start, String end, String date) {
 		ArrayList<Train> trains = GetTrains(start, end, date);
 		System.out.println(
@@ -45,7 +49,7 @@ public class App extends BookingSoftware {
 
 		for (Train t : trains) {
 			System.out.format("\n%1$-20s%2$-30s%3$-20s%4$-10s", t.id, t.name, t.time,
-					CheckBerthAvalability(start, end, "at",t));
+					CheckBerthAvalability(start, end, "at", t));
 		}
 		if (trains.size() == 0) {
 			System.out.println("\nNo Trains Found...");
@@ -55,6 +59,8 @@ public class App extends BookingSoftware {
 		return trains.size() != 0;
 	}
 
+	// Overrides the ValidateTrain method of BookingSoftware because of taking
+	// inputs and if it is wrong it will ask again
 	boolean ValidateTrainID() {
 		while (true) {
 			long train_id = Inputs.GetLong("Please Enter Train Number from Above List or enter -1 to exit");
@@ -69,6 +75,7 @@ public class App extends BookingSoftware {
 		return false;
 	}
 
+	// Function is Used to Get Ticket and Print All Ticket Details.
 	private void PrintTicket(Ticket t) {
 		System.out.println("----------------------------------------------------\n");
 		System.out.println("Ticket ID : " + t.id);
@@ -83,20 +90,38 @@ public class App extends BookingSoftware {
 		System.out.println("-----------------------------------------------------\n");
 	}
 
+	// This Function Overrides the CancelTicket method in Booking SOftware and after
+	// taking a valid ticket id it will call Cancel Ticket function in booking
+	// software
 	public void CancelTicket() {
-		if (CancelTicket(Inputs.GetLong("Please Enter Ticket ID")))
-			System.out.println("\nSuccessfully Canceled Ticket");
-		else
-			System.out.println("\nFailed To Cancel Your Ticket Please Try Again");
+		if (ValidateTrainID(Inputs.GetLong("Please Enter Your Train ID"))) {
+			long ticket_id = Inputs.GetLong("Please Enter Ticket ID");
+			if (currentTrain.passenger_details.containsKey(ticket_id)) {
+				if (CancelTicket(Inputs.GetLong("Please Enter Ticket ID")))
+					System.out.println("\nSuccessfully Canceled Ticket");
+				else
+					System.out.println("\nFailed To Cancel Your Ticket Please Try Again");
+			} else
+				System.out.println("\n Please Enter Valid Ticket ID");
+		} else
+			System.out.print("\nPlease Enter Valid Train ID");
 	}
 
+	// This Function Overloads the PrintTicket Function because before calling print
+	// ticket it will verify the given ticket id and then it call if ticket id is
+	// valid
 	public void PrintTicket(long id) {
-		if (currentTrain.passenger_details.containsKey(id))
-			PrintTicket(currentTrain.passenger_details.get(id));
-		else
-			System.out.println("Please Enter the Valid Ticket ID");
+		if (ValidateTrainID(Inputs.GetLong("Please Enter Your Train ID"))) {
+			if (currentTrain.passenger_details.containsKey(id))
+				PrintTicket(currentTrain.passenger_details.get(id));
+			else
+				System.out.println("Please Enter the Valid Ticket ID");
+		} else
+			System.out.print("\nPlease Enter Valid Train ID");
 	}
 
+	// This Function is used to print collection of Tickets which are taken from the
+	// parameters
 	public void PrintAllTickets(Collection<Ticket> my_tickets) {
 		System.out.println(
 				"\n------------------------------------------------------------------------------------------------------------------------------");

@@ -11,6 +11,7 @@ public class Login implements LoginServices {
 	private static Map<String, User> user = new HashMap<String, User>();
 	private static String loggedInUser;
 
+	// This Constructor creates 3 Users at start of the App
 	public Login() {
 		User l1 = new User("p", "Shashipreetham", "Male", 21, "admin");
 		user.put("shashi", l1);
@@ -20,6 +21,7 @@ public class Login implements LoginServices {
 		user.put("royal", l3);
 	}
 
+	// This function validates the user by taking username and password
 	public String ValidateUser() {
 		switch (Inputs.GetInt("Please Select Your Choice \n 1) Login \n 2) New User")) {
 		case 1:
@@ -43,6 +45,7 @@ public class Login implements LoginServices {
 		return null;
 	}
 
+	// This Function is used to Add new User
 	public void addNewUser() {
 		while (true) {
 			String un = Inputs.GetString("Please Enter New Username");
@@ -62,6 +65,8 @@ public class Login implements LoginServices {
 		}
 	}
 
+	// This function is used to change password which will ask for old password and
+	// if it is correct then user able to set new password
 	public void ChangePassword() {
 		if (user.get(loggedInUser).changePassword(Inputs.GetString("Please Enter Your Old Password"),
 				Inputs.GetString("Please Enter Your New Password")))
@@ -70,10 +75,12 @@ public class Login implements LoginServices {
 			System.out.println("You Have Entered Wrong Password");
 	}
 
+	// Once User Logged In this Function Greets the User
 	public void greetUser() {
 		System.out.println("\nWelcome " + user.get(loggedInUser).name);
 	}
 
+	// This function returns the present loggedIn user details to any class
 	public static User getLoggedInUser() {
 		return user.get(loggedInUser);
 	}

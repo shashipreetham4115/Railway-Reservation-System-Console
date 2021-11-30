@@ -9,10 +9,13 @@ import Utilities.Inputs;
 public class RailwayApp extends App implements RailwayAppServices {
 	Scanner sc = new Scanner(System.in);
 
+	// Overrides the BookTicket of App Class To get the the role of user or from
+	// which class it is called
 	public void BookTicket() {
 		BookTicket("Admin");
 	}
 
+	// This function is used to print all passengers in given train id
 	public void PrintPassengers() {
 		Train t = ava_trains.get(Inputs.GetLong("Please Enter Train ID"));
 		if (t.passenger_details.size() == 0) {
@@ -22,6 +25,8 @@ public class RailwayApp extends App implements RailwayAppServices {
 		PrintAllTickets(t.passenger_details.values());
 	}
 
+	// This function Overrides AddTrain of Booking Software to take all inputs
+	// required and then calls that function
 	public void AddTrain() {
 
 		String name = Inputs.GetLine("Please Enter Train Name");
@@ -44,10 +49,14 @@ public class RailwayApp extends App implements RailwayAppServices {
 		System.out.println("Sucessfully Added...");
 	}
 
+	// Overrides the PrintTicket of App class to get input and then calls that
+	// function
 	public void PrintTicket() {
 		PrintTicket(Inputs.GetLong("Please Enter Your Ticket ID"));
 	}
 
+	// Get Chart is function where final chart prepared is printed after taking all
+	// inputs i.e train id.
 	public void GetChart() {
 		Train t = ava_trains.get(Inputs.GetLong("Please Enter Train ID"));
 		PrintAllTickets(PrepareChart(t));
