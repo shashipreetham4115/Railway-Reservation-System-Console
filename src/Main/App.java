@@ -2,15 +2,14 @@ package Main;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Scanner;
 
 import Entites.Ticket;
 import Entites.Train;
 import Utilities.Inputs;
 
 public class App extends BookingSoftware {
-	Scanner sc = new Scanner(System.in);
-
+	
+	
 	public void BookTicket(String role) {
 		String start = Inputs.GetLine("Enter From Station").toUpperCase();
 		String end = Inputs.GetLine("Enter To Station").toUpperCase();
@@ -46,7 +45,7 @@ public class App extends BookingSoftware {
 
 		for (Train t : trains) {
 			System.out.format("\n%1$-20s%2$-30s%3$-20s%4$-10s", t.id, t.name, t.time,
-					CheckBerthAvalability(start, end, "at"));
+					CheckBerthAvalability(start, end, "at",t));
 		}
 		if (trains.size() == 0) {
 			System.out.println("\nNo Trains Found...");

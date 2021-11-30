@@ -16,8 +16,8 @@ public class Train extends ID {
 	public Train(String name, String start, String destination, String date, String time, int seatsPerComp,
 			int totalComp) {
 		
-		this.rac_tickets = (seatsPerComp / 8) * 2;
-		this.available_tickets = seatsPerComp - (this.rac_tickets / 2);
+		this.rac_tickets = (seatsPerComp / 8) * 2 * totalComp;
+		this.available_tickets = (seatsPerComp*totalComp) - (this.rac_tickets / 2);
 		this.side_upper = seatsPerComp;
 		this.upper = seatsPerComp - 2;
 		this.middle = seatsPerComp - 3;
@@ -28,10 +28,9 @@ public class Train extends ID {
 		this.time = time;
 		this.name = name;
 		this.id = d.getTime();
-		this.rac_tickets *= totalComp;
 		this.waiting_tickets = rac_tickets / 2;
 		this.totalComp = totalComp;
 		this.seatsPerComp = seatsPerComp;
-		
+		System.out.println(available_tickets+" "+" "+rac_tickets+" "+waiting_tickets+" "+ totalComp+" "+seatsPerComp);
 	}
 }

@@ -2,6 +2,7 @@ package Main;
 
 import java.util.*;
 
+import Entites.Train;
 import Interfaces.RailwayAppServices;
 import Utilities.Inputs;
 
@@ -13,11 +14,12 @@ public class RailwayApp extends App implements RailwayAppServices {
 	}
 
 	public void PrintPassengers() {
-		if (currentTrain.passenger_details.size() == 0) {
+		Train t = ava_trains.get(Inputs.GetLong("Please Enter Train ID"));
+		if (t.passenger_details.size() == 0) {
 			System.out.println("No Bookings done till now");
 			return;
 		}
-		PrintAllTickets(currentTrain.passenger_details.values());
+		PrintAllTickets(t.passenger_details.values());
 	}
 
 	public void AddTrain() {
@@ -33,7 +35,7 @@ public class RailwayApp extends App implements RailwayAppServices {
 		String[] arr = new String[stops + 1];
 		sc.nextLine();
 		arr[0] = start;
-		for (int i = 1; i < stops; i++) {
+		for (int i = 1; i <= stops; i++) {
 			System.out.print("\nPlease Enter " + i + "Stop : ");
 			arr[i] = sc.nextLine();
 		}
@@ -47,7 +49,8 @@ public class RailwayApp extends App implements RailwayAppServices {
 	}
 
 	public void GetChart() {
-		PrintAllTickets(PrepareChart());
+		Train t = ava_trains.get(Inputs.GetLong("Please Enter Train ID"));
+		PrintAllTickets(PrepareChart(t));
 	}
 
 }

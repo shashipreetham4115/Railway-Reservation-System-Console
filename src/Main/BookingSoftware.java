@@ -94,8 +94,10 @@ public class BookingSoftware implements BookingServices {
 
 	// This Function is used to make final Chart where for RAC passenger also seats
 	// are allocated and after this ticket bookings for this train is not allowed.
-	public Collection<Ticket> PrepareChart() {
-
+	public Collection<Ticket> PrepareChart(Train t) {
+		
+		currentTrain = t;
+		
 		FreeUpCanceledTicketSpace();
 
 		AllocateAvailableBerths(currentTrain.rac_waiting_list, "RAC");
@@ -130,7 +132,7 @@ public class BookingSoftware implements BookingServices {
 
 	// This function is used to allocate berth.
 	private String AllocateBerth(String start, String destination, long id, String pb) {
-		String ava_berth = CheckBerthAvalability(start, destination, "");
+		String ava_berth = !currentTrain.booking_track.isEmpty() ? CheckBerthAvalability(start, destination, "",currentTrain) : null;
 		if (ava_berth == null) {
 			if (currentTrain.available_tickets > 0) {
 				ava_berth = CheckPreferredBerth(pb);
@@ -228,17 +230,17 @@ public class BookingSoftware implements BookingServices {
 
 	// This function is used to check Berth availability in already booked tickets
 	// and also returns available seats status
-	protected String CheckBerthAvalability(String start, String destination, String calledFor) {
+	protected String CheckBerthAvalability(String start, String destination, String calledFor,Train t) {
 
 		String berth = null;
 		int min = Integer.MAX_VALUE;
-		int start_index = currentTrain.stops.indexOf(start.toUpperCase());
-		int end_index = currentTrain.stops.indexOf(destination.toUpperCase());
-		int ava_count = currentTrain.available_tickets;
-		for (String s : currentTrain.booking_track.keySet()) {
+		int start_index = t.stops.indexOf(start.toUpperCase());
+		int end_index = t.stops.indexOf(destination.toUpperCase());
+		int ava_count = t.available_tickets;
+		for (String s : t.booking_track.keySet()) {
 			int count = 0;
-			for (int i = start_index; i < currentTrain.stops.size(); i++) {
-				if (currentTrain.booking_track.get(s).get(i))
+			for (int i = start_index; i < t.stops.size(); i++) {
+				if (t.booking_track.get(s).get(i))
 					count++;
 				else
 					break;
@@ -253,11 +255,11 @@ public class BookingSoftware implements BookingServices {
 			}
 		}
 		if (calledFor.equals("at")) {
-			int rac = currentTrain.rac_waiting_list.size();
-			int wt = currentTrain.waiting_list.size();
+			int rac = t.rac_waiting_list.size();
+			int wt = t.waiting_list.size();
 			return ava_count > 0 ? "SL " + ava_count
-					: currentTrain.rac_tickets > 0 ? "RAC " + rac
-							: currentTrain.waiting_tickets > 0 ? "WL " + wt : "Tickets Not Available";
+					: t.rac_tickets > 0 ? "RAC " + rac
+							: t.waiting_tickets > 0 ? "WL " + wt : "Tickets Not Available";
 		}
 		return berth;
 	}
@@ -303,7 +305,7 @@ public class BookingSoftware implements BookingServices {
 	private void AllocateAvailableBerths(Queue<Long> list, String string) {
 		for (Long id : list) {
 			Ticket t = currentTrain.passenger_details.get(id);
-			String ava_berth = CheckBerthAvalability(t.from_station, t.to_station, "booking");
+			String ava_berth = CheckBerthAvalability(t.from_station, t.to_station, "booking",currentTrain);
 			if (ava_berth != null) {
 				t.p_berth = ava_berth;
 				t.p_status = "SL";
