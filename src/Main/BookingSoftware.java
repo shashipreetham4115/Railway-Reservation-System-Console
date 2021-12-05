@@ -14,7 +14,7 @@ import Entites.Train;
 import Interfaces.BookingServices;
 
 public class BookingSoftware implements BookingServices {
-	static Train currentTrain;
+	Train currentTrain;
 	protected static Map<Long, Train> ava_trains = new HashMap<Long, Train>();
 
 	// Creates a Train at start of the App
@@ -41,6 +41,7 @@ public class BookingSoftware implements BookingServices {
 		if (Login.getLoggedInUser().userType.equals("user"))
 			Login.getLoggedInUser().user_tickets.put(p.id, p);
 		return p;
+
 	}
 
 	// This Function is Used to Filter Trains available
@@ -95,9 +96,9 @@ public class BookingSoftware implements BookingServices {
 	// This Function is used to make final Chart where for RAC passenger also seats
 	// are allocated and after this ticket bookings for this train is not allowed.
 	public Collection<Ticket> PrepareChart(Train t) {
-		
+
 		currentTrain = t;
-		
+
 		FreeUpCanceledTicketSpace();
 
 		AllocateAvailableBerths(currentTrain.rac_waiting_list, "RAC");
@@ -132,7 +133,9 @@ public class BookingSoftware implements BookingServices {
 
 	// This function is used to allocate berth.
 	private String AllocateBerth(String start, String destination, long id, String pb) {
-		String ava_berth = !currentTrain.booking_track.isEmpty() ? CheckBerthAvalability(start, destination, "",currentTrain) : null;
+		String ava_berth = !currentTrain.booking_track.isEmpty()
+				? CheckBerthAvalability(start, destination, "", currentTrain)
+				: null;
 		if (ava_berth == null) {
 			if (currentTrain.available_tickets > 0) {
 				ava_berth = CheckPreferredBerth(pb);
@@ -230,7 +233,7 @@ public class BookingSoftware implements BookingServices {
 
 	// This function is used to check Berth availability in already booked tickets
 	// and also returns available seats status
-	protected String CheckBerthAvalability(String start, String destination, String calledFor,Train t) {
+	protected String CheckBerthAvalability(String start, String destination, String calledFor, Train t) {
 
 		String berth = null;
 		int min = Integer.MAX_VALUE;
@@ -258,8 +261,7 @@ public class BookingSoftware implements BookingServices {
 			int rac = t.rac_waiting_list.size();
 			int wt = t.waiting_list.size();
 			return ava_count > 0 ? "SL " + ava_count
-					: t.rac_tickets > 0 ? "RAC " + rac
-							: t.waiting_tickets > 0 ? "WL " + wt : "Tickets Not Available";
+					: t.rac_tickets > 0 ? "RAC " + rac : t.waiting_tickets > 0 ? "WL " + wt : "Tickets Not Available";
 		}
 		return berth;
 	}
@@ -305,7 +307,7 @@ public class BookingSoftware implements BookingServices {
 	private void AllocateAvailableBerths(Queue<Long> list, String string) {
 		for (Long id : list) {
 			Ticket t = currentTrain.passenger_details.get(id);
-			String ava_berth = CheckBerthAvalability(t.from_station, t.to_station, "booking",currentTrain);
+			String ava_berth = CheckBerthAvalability(t.from_station, t.to_station, "booking", currentTrain);
 			if (ava_berth != null) {
 				t.p_berth = ava_berth;
 				t.p_status = "SL";

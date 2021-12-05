@@ -23,7 +23,7 @@ public class Login implements LoginServices {
 
 	// This function validates the user by taking username and password
 	public String ValidateUser() {
-		switch (Inputs.GetInt("Please Select Your Choice \n 1) Login \n 2) New User")) {
+		switch (Inputs.GetInt("Please Select Your Choice \n 1) Login \n 2) New User \n")) {
 		case 1:
 			break;
 		case 2: {
