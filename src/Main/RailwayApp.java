@@ -2,27 +2,22 @@ package Main;
 
 import java.util.*;
 
-import Entites.Train;
 import Interfaces.RailwayAppServices;
 import Utilities.Inputs;
 
 public class RailwayApp extends App implements RailwayAppServices {
 	Scanner sc = new Scanner(System.in);
 
-	// Overrides the BookTicket of App Class To get the the role of user or from
-	// which class it is called
-	public void BookTicket() {
-		BookTicket("Admin");
-	}
-
 	// This function is used to print all passengers in given train id
 	public void PrintPassengers() {
-		Train t = ava_trains.get(Inputs.GetLong("Please Enter Train ID"));
-		if (t.passenger_details.size() == 0) {
-			System.out.println("No Bookings done till now");
-			return;
-		}
-		PrintAllTickets(t.passenger_details.values());
+		if (ValidateTrainID(Inputs.GetLong("Please Enter Your Train ID"))) {
+			if (currentTrain.passenger_details.size() == 0) {
+				System.out.println("No Bookings done till now");
+				return;
+			}
+			PrintAllTickets(currentTrain.passenger_details.values());
+		} else
+			System.out.println("\nPlease Enter Valid Train ID");
 	}
 
 	// This function Overrides AddTrain of Booking Software to take all inputs
@@ -58,8 +53,10 @@ public class RailwayApp extends App implements RailwayAppServices {
 	// Get Chart is function where final chart prepared is printed after taking all
 	// inputs i.e train id.
 	public void GetChart() {
-		Train t = ava_trains.get(Inputs.GetLong("Please Enter Train ID"));
-		PrintAllTickets(PrepareChart(t));
+		if (ValidateTrainID(Inputs.GetLong("Please Enter Your Train ID"))) {
+			PrintAllTickets(PrepareChart(currentTrain));
+		} else
+			System.out.println("\nPlease Enter Valid Train ID");
 	}
 
 }

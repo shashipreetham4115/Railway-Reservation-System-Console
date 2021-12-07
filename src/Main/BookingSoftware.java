@@ -1,13 +1,6 @@
 package Main;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 
 import Entites.Ticket;
 import Entites.Train;
@@ -23,7 +16,7 @@ public class BookingSoftware implements BookingServices {
 			String[] arr = { "Tenkasi", "Kadayanallur", "Sankarankovil", "Rajapalayam", "Srivilliputtur", "Sivakasi",
 					"Virudunagar", "Madurai", "Dindigul", "Tiruchchirapalli", "Vriddhachalam", "Villupuram",
 					"Chengalpattu", "Tambaram", "Chennai Egmore" };
-			currentTrain = AddTrain("Chennai Egmore Express", "Tenkasi", "Chennai Egmore", "30-11-2021", "4:00PM", arr,
+			currentTrain = AddTrain("Chennai Egmore Express", "Tenkasi", "Chennai Egmore", "08-12-2021", "4:00PM", arr,
 					8, 1);
 		}
 	}

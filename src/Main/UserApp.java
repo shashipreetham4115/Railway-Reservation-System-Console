@@ -8,12 +8,6 @@ import Utilities.Inputs;
 
 public class UserApp extends App implements UserAppServices {
 
-	// Overrides the BookTicket of App Class To get the the role of user or from
-	// which class it is called
-	public void BookTicket() {
-		BookTicket("User");
-	}
-
 	// This function calls the BookTicket function of App by sending its role
 	public void BookTicketForOthers() {
 		BookTicket("Others");
