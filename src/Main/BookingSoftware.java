@@ -9,7 +9,7 @@ import Interfaces.BookingServices;
 public class BookingSoftware implements BookingServices {
 	Train currentTrain;
 	protected static Map<Long, Train> ava_trains = new HashMap<Long, Train>();
-
+	
 	// Creates a Train at start of the App
 	public BookingSoftware() {
 		if (ava_trains.isEmpty()) {
@@ -109,7 +109,6 @@ public class BookingSoftware implements BookingServices {
 		Train t = new Train(name, start, destination, date, time, seatsPerComp, totalComp);
 		ava_trains.put(t.id, t);
 		Collections.addAll(t.stops, arr);
-		t.stops.replaceAll(String::toUpperCase);
 		return t;
 	}
 
