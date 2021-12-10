@@ -7,7 +7,7 @@ import Entites.Train;
 import Interfaces.BookingServices;
 
 public class BookingSoftware implements BookingServices {
-	Train currentTrain;
+	static Train currentTrain;
 	protected static Map<Long, Train> ava_trains = new HashMap<Long, Train>();
 	
 	// Creates a Train at start of the App
@@ -16,7 +16,7 @@ public class BookingSoftware implements BookingServices {
 			String[] arr = { "Tenkasi", "Kadayanallur", "Sankarankovil", "Rajapalayam", "Srivilliputtur", "Sivakasi",
 					"Virudunagar", "Madurai", "Dindigul", "Tiruchchirapalli", "Vriddhachalam", "Villupuram",
 					"Chengalpattu", "Tambaram", "Chennai Egmore" };
-			currentTrain = AddTrain("Chennai Egmore Express", "Tenkasi", "Chennai Egmore", "08-12-2021", "4:00PM", arr,
+			currentTrain = AddTrain("Chennai Egmore Express", "Tenkasi", "Chennai Egmore", "10-12-2021", "4:00PM", arr,
 					8, 1);
 		}
 	}
@@ -109,6 +109,7 @@ public class BookingSoftware implements BookingServices {
 		Train t = new Train(name, start, destination, date, time, seatsPerComp, totalComp);
 		ava_trains.put(t.id, t);
 		Collections.addAll(t.stops, arr);
+		t.stops.replaceAll(String::toUpperCase);
 		return t;
 	}
 
