@@ -1,11 +1,11 @@
 package interfaces;
 
- public interface UserAppServices extends TrainServices{
+public interface UserAppServices extends AppServices {
 
-	 void myBookings();
-	
-	 void downloadTicket();
-	
-	 void bookTicketForOthers();
-	
+	void myBookings();
+
+	void downloadTicket();
+
+	void bookTicketForOthers();
+
 }
