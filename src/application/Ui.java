@@ -9,8 +9,8 @@ import entites.User;
 import handlers.BookingHandler;
 import handlers.LoginHandler;
 import handlers.TrainHandler;
-import utilities.Inputs;
-import utilities.ValidateInput;
+import utilities.InputsUtil;
+import utilities.ValidateInputUtil;
 
 public class Ui {
 
@@ -25,17 +25,17 @@ public class Ui {
 		try {
 			String un = "";
 			while (true) {
-				un = Inputs.getString("Please Enter New Username");
+				un = InputsUtil.getString("Please Enter New Username");
 				if (loginHandler.isUsernameAvailable(un)) {
 					break;
 				}
 				System.out.println("Username not Available");
 			}
 			sc.nextLine();
-			String name = Inputs.getLine("Please Enter Full Name");
-			String gender = ValidateInput.getGender();
-			int age = ValidateInput.getAge();
-			String pw = Inputs.getString("Please Enter Password");
+			String name = InputsUtil.getLine("Please Enter Full Name");
+			String gender = ValidateInputUtil.getGender();
+			int age = ValidateInputUtil.getAge();
+			String pw = InputsUtil.getString("Please Enter Password");
 			if (loginHandler.addNewUser(un, pw, name, gender, age, role))
 				System.out.println("Successfully Added");
 			else
@@ -49,9 +49,9 @@ public class Ui {
 	// if it is correct then user able to set new password
 	public void changePassword() {
 		try {
-			String oldPassword = Inputs.getString("Please Enter Your Old Password");
+			String oldPassword = InputsUtil.getString("Please Enter Your Old Password");
 			if (loginHandler.verifyPassword(oldPassword)) {
-				loginHandler.changePassword(oldPassword, Inputs.getString("Please Enter Your New Password"));
+				loginHandler.changePassword(oldPassword, InputsUtil.getString("Please Enter Your New Password"));
 				System.out.println("Your Password has been changed Successfully");
 			} else
 				System.out.println("You Have Entered Wrong Password");
@@ -71,9 +71,9 @@ public class Ui {
 
 	public void bookTicket(String role) {
 		try {
-			String start = Inputs.getLine("Enter From Station").toUpperCase();
-			String end = Inputs.getLine("Enter To Station").toUpperCase();
-			String date = ValidateInput.getDate();
+			String start = InputsUtil.getLine("Enter From Station").toUpperCase();
+			String end = InputsUtil.getLine("Enter To Station").toUpperCase();
+			String date = ValidateInputUtil.getDate();
 			Ticket t = null;
 			if (printTrains(start, end, date))
 				if (validateTrainID()) {
@@ -84,14 +84,14 @@ public class Ui {
 						start = train.arrStNames.get(startIndex);
 					if (endIndex != -1)
 						end = train.arrStNames.get(endIndex);
-					String pb = ValidateInput.getPreferedBerth();
+					String pb = ValidateInputUtil.getPreferedBerth();
 					User u;
 					if (role.equals("User")) {
 						u = loginHandler.getLoggedInUser();
 						t = bookingHandler.bookTicket(u, start, end, pb, trainHandler.getCurrentTrain());
 					} else {
-						u = new User(Inputs.getLine("Please Enter Name"), ValidateInput.getGender(),
-								ValidateInput.getAge());
+						u = new User(InputsUtil.getLine("Please Enter Name"), ValidateInputUtil.getGender(),
+								ValidateInputUtil.getAge());
 						t = bookingHandler.bookTicket(u, start, end, pb, trainHandler.getCurrentTrain());
 					}
 				} else
@@ -143,7 +143,7 @@ public class Ui {
 	private boolean validateTrainID() {
 		try {
 			while (true) {
-				int sno = Inputs.getInt("Please Enter S.No from Above List or enter -1 to exit");
+				int sno = InputsUtil.getInt("Please Enter S.No from Above List or enter -1 to exit");
 				int trainId = trainIds.get(sno - 1);
 				if (trainId == -1)
 					break;

@@ -2,7 +2,7 @@ package utilities;
 
 import java.util.Scanner;
 
-public class Inputs {
+public class InputsUtil {
 
 	static Scanner sc = new Scanner(System.in);
 

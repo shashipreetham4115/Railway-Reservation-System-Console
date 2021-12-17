@@ -3,7 +3,7 @@ package application;
 import java.util.*;
 
 import interfaces.UserAppServices;
-import utilities.Inputs;
+import utilities.InputsUtil;
 
 public class UserUi extends Ui implements UserAppServices {
 
@@ -21,7 +21,7 @@ public class UserUi extends Ui implements UserAppServices {
 	// TicketID
 	public void downloadTicket() {
 		try {
-			printTicket(Inputs.getLong("Please Enter Your PNR"));
+			printTicket(InputsUtil.getLong("Please Enter Your PNR"));
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -29,7 +29,7 @@ public class UserUi extends Ui implements UserAppServices {
 
 	public void cancelTicket() {
 		try {
-			long ticketId = Inputs.getLong("Please Enter PNR");
+			long ticketId = InputsUtil.getLong("Please Enter PNR");
 			if (loginHandler.getLoggedInUser().myBookings.contains(ticketId)) {
 				if (cancelTicket(ticketId)) {
 					loginHandler.getLoggedInUser().myBookings.remove(ticketId);
@@ -59,13 +59,13 @@ public class UserUi extends Ui implements UserAppServices {
 	public String validateUser() {
 		try {
 			while (true) {
-				switch (Inputs.getInt("1) LoginHandler \n2) New User \n3) Back \nPlease Select Your Choice ")) {
+				switch (InputsUtil.getInt("1) LoginHandler \n2) New User \n3) Back \nPlease Select Your Choice ")) {
 				case 1: {
-					String username = Inputs.getString("Please Enter Your Username");
+					String username = InputsUtil.getString("Please Enter Your Username");
 					if (loginHandler.isUsernameAvailable(username))
 						System.out.println("\nIncorrect Username");
 					else {
-						String password = Inputs.getString("Please Enter Your Password");
+						String password = InputsUtil.getString("Please Enter Your Password");
 						String userType = loginHandler.validateUser(username, password);
 						if (userType != null && userType.equals("user")) {
 							greetUser();

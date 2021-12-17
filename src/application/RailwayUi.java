@@ -5,15 +5,15 @@ import java.util.*;
 import entites.Station;
 import entites.Train;
 import interfaces.RailwayAppServices;
-import utilities.Inputs;
-import utilities.ValidateInput;
+import utilities.InputsUtil;
+import utilities.ValidateInputUtil;
 
 public class RailwayUi extends Ui implements RailwayAppServices {
 	Scanner sc = new Scanner(System.in);
 
 	public void cancelTicket() {
 		try {
-			long ticketId = Inputs.getLong("Please Enter PNR");
+			long ticketId = InputsUtil.getLong("Please Enter PNR");
 			cancelTicket(ticketId);
 		} catch (Exception e) {
 			System.out.println(e);
@@ -23,11 +23,11 @@ public class RailwayUi extends Ui implements RailwayAppServices {
 	// This function validates the user by taking username and password
 	public String validateUser() {
 		try {
-			String username = Inputs.getString("Please Enter Your Username");
+			String username = InputsUtil.getString("Please Enter Your Username");
 			if (loginHandler.isUsernameAvailable(username))
 				System.out.println("\nIncorrect Username");
 			else {
-				String password = Inputs.getString("Please Enter Your Password");
+				String password = InputsUtil.getString("Please Enter Your Password");
 				String userType = loginHandler.validateUser(username, password);
 				if (userType != null && userType.equals("admin")) {
 					greetUser();
@@ -47,7 +47,7 @@ public class RailwayUi extends Ui implements RailwayAppServices {
 	// This function is used to print all passengers in given train id
 	public void printPassengers() {
 		try {
-			if (trainHandler.validateTrainID(Inputs.getInt("Please Enter Your Train Id"))) {
+			if (trainHandler.validateTrainID(InputsUtil.getInt("Please Enter Your Train Id"))) {
 				if (trainHandler.getCurrentTrain().cnfList.size() == 0) {
 					System.out.println("No BookingHandler done till now");
 					return;
@@ -76,17 +76,17 @@ public class RailwayUi extends Ui implements RailwayAppServices {
 	// required and then calls that function
 	public void addTrain() {
 		try {
-			int trainNo = Inputs.getInt("Please Enter Train No");
-			String name = Inputs.getLine("Please Enter Train Name").toUpperCase();
-			String start = Inputs.getLine("Please Enter Start Station").toUpperCase();
-			String startCode = Inputs.getLine("Please Enter Start Station Code").toUpperCase();
-			String destination = Inputs.getLine("Please Enter Destination").toUpperCase();
-			String destinationCode = Inputs.getLine("Please Enter Destination Station Code").toUpperCase();
-			String date = ValidateInput.getDate();
-			String time = ValidateInput.getTime();
-			int totalComp = ValidateInput.getCompartment();
-			int SeatsPerComp = ValidateInput.getValidSeatsPerComp();
-			int stops = Inputs.getInt("Please Enter how many stops are there");
+			int trainNo = InputsUtil.getInt("Please Enter Train No");
+			String name = InputsUtil.getLine("Please Enter Train Name").toUpperCase();
+			String start = InputsUtil.getLine("Please Enter Start Station").toUpperCase();
+			String startCode = InputsUtil.getLine("Please Enter Start Station Code").toUpperCase();
+			String destination = InputsUtil.getLine("Please Enter Destination").toUpperCase();
+			String destinationCode = InputsUtil.getLine("Please Enter Destination Station Code").toUpperCase();
+			String date = ValidateInputUtil.getDate();
+			String time = ValidateInputUtil.getTime();
+			int totalComp = ValidateInputUtil.getCompartment();
+			int SeatsPerComp = ValidateInputUtil.getValidSeatsPerComp();
+			int stops = InputsUtil.getInt("Please Enter how many stops are there");
 			String[] arrStations = new String[stops + 1];
 			String[] arrCodes = new String[stops + 1];
 			sc.nextLine();
@@ -143,7 +143,7 @@ public class RailwayUi extends Ui implements RailwayAppServices {
 	// function
 	public void printTicket() {
 		try {
-			printTicket(Inputs.getLong("Please Enter PNR"));
+			printTicket(InputsUtil.getLong("Please Enter PNR"));
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -153,7 +153,7 @@ public class RailwayUi extends Ui implements RailwayAppServices {
 	// inputs i.e train id.
 	public void getChart() {
 		try {
-			if (trainHandler.validateTrainID(Inputs.getInt("Please Enter Your Train Id"))) {
+			if (trainHandler.validateTrainID(InputsUtil.getInt("Please Enter Your Train Id"))) {
 				printAllTickets(bookingHandler.prepareChart(trainHandler.getCurrentTrain()));
 			} else
 				System.out.println("\nPlease Enter Valid Train Id");
@@ -165,7 +165,7 @@ public class RailwayUi extends Ui implements RailwayAppServices {
 	public void addNewUser() {
 		try {
 			while (true) {
-				switch (Inputs.getInt("1) Admin \n2) User \n3) Back \nPlease Choose User Role")) {
+				switch (InputsUtil.getInt("1) Admin \n2) User \n3) Back \nPlease Choose User Role")) {
 				case 1: {
 					addNewUser("admin");
 					break;

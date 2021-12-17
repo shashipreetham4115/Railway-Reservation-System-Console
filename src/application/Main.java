@@ -1,6 +1,6 @@
 package application;
 
-import utilities.Inputs;
+import utilities.InputsUtil;
 
 public class Main {
 	public static void main(String[] args) {
@@ -10,7 +10,7 @@ public class Main {
 
 		while (true) {
 			while (userType == "") {
-				switch (Inputs.getInt("1) Admin \n2) User \nPlease Choose Your Role ")) {
+				switch (InputsUtil.getInt("1) Admin \n2) User \nPlease Choose Your Role ")) {
 				case 1: {
 					userType = ra.validateUser();
 					break;
@@ -38,7 +38,7 @@ public class Main {
 				System.out.println("9. Logout");
 				System.out.println("10. Exit");
 
-				switch (Inputs.getInt("Enter Your Choice Here")) {
+				switch (InputsUtil.getInt("Enter Your Choice Here")) {
 				case 1: {
 					ra.bookTicket("Admin");
 					break;
@@ -92,7 +92,7 @@ public class Main {
 				System.out.println("7. Logout");
 				System.out.println("8. Exit");
 
-				switch (Inputs.getInt("Enter Your Choice Here")) {
+				switch (InputsUtil.getInt("Enter Your Choice Here")) {
 				case 1: {
 					ua.bookTicket("User");
 					break;

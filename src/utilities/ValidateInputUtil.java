@@ -5,13 +5,13 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
-public class ValidateInput {
+public class ValidateInputUtil {
 
-	private ValidateInput() {
+	private ValidateInputUtil() {
 	}
 
 	public static String getGender() {
-		String gender = Inputs.getString("Please Enter Gender (Male or Female or Other)");
+		String gender = InputsUtil.getString("Please Enter Gender (Male or Female or Other)");
 		String[] arr = { "M", "MALE", "F", "FEMALE", "O", "OTHER" };
 		if (Arrays.asList(arr).contains(gender.toUpperCase())) {
 			return gender;
@@ -21,7 +21,7 @@ public class ValidateInput {
 	}
 
 	public static int getAge() {
-		int age = Inputs.getInt("Please Enter Age");
+		int age = InputsUtil.getInt("Please Enter Age");
 		if (age > 5 && age < 110) {
 			return age;
 		}
@@ -30,7 +30,7 @@ public class ValidateInput {
 	}
 
 	public static String getDate() {
-		String strDate = Inputs.getString("Please Enter Date");
+		String strDate = InputsUtil.getString("Please Enter Date");
 		try {
 			int date = Integer.parseInt(strDate.split("/")[0]);
 			int month = Integer.parseInt(strDate.split("/")[1]);
@@ -45,7 +45,7 @@ public class ValidateInput {
 	}
 
 	public static String getPreferedBerth() {
-		String pb = Inputs.getString("Please Enter Your Prefered Berth (UB,MB,LB,SU)");
+		String pb = InputsUtil.getString("Please Enter Your Prefered Berth (UB,MB,LB,SU)");
 		String[] arr = { "UB", "LB", "MD", "SU" };
 		if (Arrays.asList(arr).contains(pb.toUpperCase())) {
 			return pb;
@@ -55,7 +55,7 @@ public class ValidateInput {
 	}
 
 	public static int getValidSeatsPerComp() {
-		int seats = Inputs.getInt("Please Enter Total Seats Per Compartment");
+		int seats = InputsUtil.getInt("Please Enter Total Seats Per Compartment");
 		if (seats >= 8) {
 			if (seats % 8 == 0)
 				return seats;
@@ -66,7 +66,7 @@ public class ValidateInput {
 	}
 
 	public static String getTime() {
-		String time = Inputs.getLine("Please Enter Time (Format : 10:12 AM, 12:01 PM)");
+		String time = InputsUtil.getLine("Please Enter Time (Format : 10:12 AM, 12:01 PM)");
 		try {
 			if (time.length() < 8) {
 				String hours = time.split(":")[0];
@@ -87,7 +87,7 @@ public class ValidateInput {
 	}
 
 	public static int getCompartment() {
-		int comp = Inputs.getInt("Please Enter Total No of Compartments");
+		int comp = InputsUtil.getInt("Please Enter Total No of Compartments");
 		if (comp > 0)
 			return comp;
 		System.out.println("Please Enter Valid No of Compartments");
