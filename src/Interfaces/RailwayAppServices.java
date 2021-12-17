@@ -1,10 +1,10 @@
-package Interfaces;
+package interfaces;
 
-public interface RailwayAppServices extends BookingServices {
+ public interface RailwayAppServices extends TrainServices{
 
-	public void PrintPassengers();
+	 void printPassengers();
 
-	public void PrintTicket();
+	 void printTicket();
 
-	public void GetChart();
+	 void getChart();
 }

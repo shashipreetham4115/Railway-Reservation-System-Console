@@ -1,29 +1,40 @@
-package Utilities;
+package utilities;
 
 import java.util.Scanner;
 
 public class Inputs {
+
 	static Scanner sc = new Scanner(System.in);
 
-	public static int GetInt(String request) {
-		System.out.print("\n" + request + " : ");
-		return sc.nextInt();
+	public static int getInt(String request) {
+		while (true) {
+			try {
+				return Integer.parseInt(getString(request));
+			} catch (Exception e) {
+				System.out.println("Please Enter Valid Input");
+			}
+		}
 	}
 
-	public static String GetString(String request) {
+	public static String getString(String request) {
 		System.out.print("\n" + request + " : ");
 		return sc.next();
 	}
 
-	public static String GetLine(String request) {
+	public static String getLine(String request) {
 		sc.nextLine();
 		System.out.print("\n" + request + " : ");
 		return sc.nextLine();
 	}
 
-	public static long GetLong(String request) {
-		System.out.print("\n" + request + " : ");
-		return sc.nextLong();
+	public static long getLong(String request) {
+		while (true) {
+			try {
+				return Long.parseLong(getString(request));
+			} catch (Exception e) {
+				System.out.println("Please Enter Valid Input");
+			}
+		}
 	}
 
 }

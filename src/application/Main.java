@@ -1,22 +1,30 @@
-package Main;
+package application;
 
-import Utilities.Inputs;
+import utilities.Inputs;
 
 public class Main {
 	public static void main(String[] args) {
-		String userType = null;
-		RailwayApp ra = new RailwayApp();
-		UserApp ua = new UserApp();
-		Login val = new Login();
+		String userType = "";
+		RailwayUi ra = new RailwayUi();
+		UserUi ua = new UserUi();
 
 		while (true) {
-			while (userType == null) {
-				userType = val.ValidateUser();
+			while (userType == "") {
+				switch (Inputs.getInt("1) Admin \n2) User \nPlease Choose Your Role ")) {
+				case 1: {
+					userType = ra.validateUser();
+					break;
+				}
+				case 2: {
+					userType = ua.validateUser();
+					break;
+				}
+				default:
+					System.out.println("Please Choose Correct Choice");
+				}
 			}
 
-			val.greetUser();
-
-			while (userType == "admin") {
+			while (userType.equals("admin")) {
 
 				System.out.println("\nPlease Choose Your Choice");
 				System.out.println("1. Book Ticket");
@@ -29,40 +37,40 @@ public class Main {
 				System.out.println("8. Change Password");
 				System.out.println("9. Logout");
 				System.out.println("10. Exit");
-				
-				switch (Inputs.GetInt("Enter Your Choice Here")) {
+
+				switch (Inputs.getInt("Enter Your Choice Here")) {
 				case 1: {
-					ra.BookTicket("Admin");
+					ra.bookTicket("Admin");
 					break;
 				}
 				case 2: {
-					ra.CancelTicket();
+					ra.cancelTicket();
 					break;
 				}
 				case 3: {
-					ra.PrintTicket();
+					ra.printTicket();
 					break;
 				}
 				case 4:
-					ra.PrintPassengers();
+					ra.printPassengers();
 					break;
 				case 5:
-					val.addNewUser();
+					ra.addNewUser();
 					break;
 				case 6: {
-					ra.AddTrain();
+					ra.addTrain();
 					break;
 				}
 				case 7: {
-					ra.GetChart();
+					ra.getChart();
 					break;
 				}
 				case 8: {
-					val.ChangePassword();
+					ra.changePassword();
 					break;
 				}
 				case 9: {
-					userType = null;
+					userType = "";
 					break;
 				}
 				case 10: {
@@ -72,7 +80,7 @@ public class Main {
 					System.out.println("Please Choose Correct Choice");
 				}
 			}
-			while (userType == "user") {
+			while (userType.equals("user")) {
 
 				System.out.println("\nPlease Choose Your Choice");
 				System.out.println("1. Book Ticket");
@@ -83,34 +91,34 @@ public class Main {
 				System.out.println("6. Change Password");
 				System.out.println("7. Logout");
 				System.out.println("8. Exit");
-				
-				switch (Inputs.GetInt("Enter Your Choice Here")) {
+
+				switch (Inputs.getInt("Enter Your Choice Here")) {
 				case 1: {
-					ua.BookTicket("User");
+					ua.bookTicket("User");
 					break;
 				}
 				case 2: {
-					ua.BookTicketForOthers();
+					ua.bookTicketForOthers();
 					break;
 				}
 				case 3: {
-					ua.CancelTicket();
+					ua.cancelTicket();
 					break;
 				}
 				case 4: {
-					ua.DownloadTicket();
+					ua.downloadTicket();
 					break;
 				}
 				case 5: {
-					ua.MyBookings();
+					ua.myBookings();
 					break;
 				}
 				case 6: {
-					val.ChangePassword();
+					ra.changePassword();
 					break;
 				}
 				case 7: {
-					userType = null;
+					userType = "";
 					break;
 				}
 				case 8: {

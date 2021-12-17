@@ -1,11 +1,11 @@
-package Interfaces;
+package interfaces;
 
 public interface LoginServices {
 	
-	abstract String ValidateUser();
+	 String validateUser();
 
-	abstract void ChangePassword();
+	 boolean changePassword();
 
-	abstract void addNewUser();
+	 void addNewUser(String role);
 	
 }
