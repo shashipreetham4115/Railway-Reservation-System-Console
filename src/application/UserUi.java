@@ -7,7 +7,7 @@ import utilities.Inputs;
 
 public class UserUi extends Ui implements UserAppServices {
 
-	// This function calls the BookTicket function of TrainSoftware by sending its
+	// This function calls the BookTicket function of TrainHandler by sending its
 	// role
 	public void bookTicketForOthers() {
 		try {
@@ -17,7 +17,7 @@ public class UserUi extends Ui implements UserAppServices {
 		}
 	}
 
-	// This Function calls the PrintTicket function of TrainSoftware by sending its
+	// This Function calls the PrintTicket function of TrainHandler by sending its
 	// TicketID
 	public void downloadTicket() {
 		try {
@@ -30,9 +30,9 @@ public class UserUi extends Ui implements UserAppServices {
 	public void cancelTicket() {
 		try {
 			long ticketId = Inputs.getLong("Please Enter PNR");
-			if (login.getLoggedInUser().myBookings.contains(ticketId)) {
+			if (loginHandler.getLoggedInUser().myBookings.contains(ticketId)) {
 				if (cancelTicket(ticketId)) {
-					login.getLoggedInUser().myBookings.remove(ticketId);
+					loginHandler.getLoggedInUser().myBookings.remove(ticketId);
 				}
 			}
 		} catch (Exception e) {
@@ -43,10 +43,10 @@ public class UserUi extends Ui implements UserAppServices {
 	// This function is used to print user booked tickets
 	public void myBookings() {
 		try {
-			ArrayList<Long> myTickets = login.getLoggedInUser().myBookings;
+			ArrayList<Long> myTickets = loginHandler.getLoggedInUser().myBookings;
 
 			if (myTickets.isEmpty()) {
-				System.out.println("No BookingSoftware done till now");
+				System.out.println("No BookingHandler done till now");
 				return;
 			}
 
@@ -59,14 +59,14 @@ public class UserUi extends Ui implements UserAppServices {
 	public String validateUser() {
 		try {
 			while (true) {
-				switch (Inputs.getInt("1) Login \n2) New User \n3) Back \nPlease Select Your Choice ")) {
+				switch (Inputs.getInt("1) LoginHandler \n2) New User \n3) Back \nPlease Select Your Choice ")) {
 				case 1: {
 					String username = Inputs.getString("Please Enter Your Username");
-					if (login.isUsernameAvailable(username))
+					if (loginHandler.isUsernameAvailable(username))
 						System.out.println("\nIncorrect Username");
 					else {
 						String password = Inputs.getString("Please Enter Your Password");
-						String userType = login.validateUser(username, password);
+						String userType = loginHandler.validateUser(username, password);
 						if (userType != null && userType.equals("user")) {
 							greetUser();
 							return userType;

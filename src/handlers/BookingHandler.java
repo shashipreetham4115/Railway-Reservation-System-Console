@@ -1,4 +1,4 @@
-package backend;
+package handlers;
 
 import java.util.*;
 
@@ -7,7 +7,7 @@ import entites.Train;
 import entites.User;
 import interfaces.BookingServices;
 
-public class BookingSoftware implements BookingServices {
+public class BookingHandler implements BookingServices {
 
 	private Train currentTrain;
 

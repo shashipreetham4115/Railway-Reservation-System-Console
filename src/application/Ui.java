@@ -2,22 +2,22 @@ package application;
 
 import java.util.*;
 
-import backend.TrainSoftware;
-import backend.BookingSoftware;
-import backend.Login;
 import entites.Station;
 import entites.Ticket;
 import entites.Train;
 import entites.User;
+import handlers.BookingHandler;
+import handlers.LoginHandler;
+import handlers.TrainHandler;
 import utilities.Inputs;
 import utilities.ValidateInput;
 
 public class Ui {
 
 	Scanner sc = new Scanner(System.in);
-	Login login = new Login();
-	TrainSoftware trainSoftware = new TrainSoftware();
-	BookingSoftware bookingSoftware = new BookingSoftware();
+	LoginHandler loginHandler = new LoginHandler();
+	TrainHandler trainHandler = new TrainHandler();
+	BookingHandler bookingHandler = new BookingHandler();
 	private ArrayList<Integer> trainIds = new ArrayList<>();
 
 	// This Function is used to Add new User
@@ -26,7 +26,7 @@ public class Ui {
 			String un = "";
 			while (true) {
 				un = Inputs.getString("Please Enter New Username");
-				if (login.isUsernameAvailable(un)) {
+				if (loginHandler.isUsernameAvailable(un)) {
 					break;
 				}
 				System.out.println("Username not Available");
@@ -36,7 +36,7 @@ public class Ui {
 			String gender = ValidateInput.getGender();
 			int age = ValidateInput.getAge();
 			String pw = Inputs.getString("Please Enter Password");
-			if (login.addNewUser(un, pw, name, gender, age, role))
+			if (loginHandler.addNewUser(un, pw, name, gender, age, role))
 				System.out.println("Successfully Added");
 			else
 				System.out.println("Please Try Again");
@@ -50,8 +50,8 @@ public class Ui {
 	public void changePassword() {
 		try {
 			String oldPassword = Inputs.getString("Please Enter Your Old Password");
-			if (login.verifyPassword(oldPassword)) {
-				login.changePassword(oldPassword, Inputs.getString("Please Enter Your New Password"));
+			if (loginHandler.verifyPassword(oldPassword)) {
+				loginHandler.changePassword(oldPassword, Inputs.getString("Please Enter Your New Password"));
 				System.out.println("Your Password has been changed Successfully");
 			} else
 				System.out.println("You Have Entered Wrong Password");
@@ -63,7 +63,7 @@ public class Ui {
 	// Once User Logged In this Function Greets the User
 	public void greetUser() {
 		try {
-			System.out.println("\nWelcome " + login.getUsername());
+			System.out.println("\nWelcome " + loginHandler.getUsername());
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -77,7 +77,7 @@ public class Ui {
 			Ticket t = null;
 			if (printTrains(start, end, date))
 				if (validateTrainID()) {
-					Train train = trainSoftware.getCurrentTrain();
+					Train train = trainHandler.getCurrentTrain();
 					int startIndex = train.arrStCodes.indexOf(start);
 					int endIndex = train.arrStCodes.indexOf(end);
 					if (startIndex != -1)
@@ -87,12 +87,12 @@ public class Ui {
 					String pb = ValidateInput.getPreferedBerth();
 					User u;
 					if (role.equals("User")) {
-						u = login.getLoggedInUser();
-						t = bookingSoftware.bookTicket(u, start, end, pb, trainSoftware.getCurrentTrain());
+						u = loginHandler.getLoggedInUser();
+						t = bookingHandler.bookTicket(u, start, end, pb, trainHandler.getCurrentTrain());
 					} else {
 						u = new User(Inputs.getLine("Please Enter Name"), ValidateInput.getGender(),
 								ValidateInput.getAge());
-						t = bookingSoftware.bookTicket(u, start, end, pb, trainSoftware.getCurrentTrain());
+						t = bookingHandler.bookTicket(u, start, end, pb, trainHandler.getCurrentTrain());
 					}
 				} else
 					return;
@@ -109,13 +109,13 @@ public class Ui {
 		}
 	}
 
-	// This Function Overrides the CancelTicket method in BookingSoftware SOftware
+	// This Function Overrides the CancelTicket method in BookingHandler SOftware
 	// and after taking a valid ticket id it will call Cancel Ticket function in
 	// booking software
 	public boolean cancelTicket(Long ticketId) {
 		try {
-			if (bookingSoftware.getTicket(ticketId) != null) {
-				if (bookingSoftware.cancelTicket(ticketId)) {
+			if (bookingHandler.getTicket(ticketId) != null) {
+				if (bookingHandler.cancelTicket(ticketId)) {
 					System.out.println("\nSuccessfully Canceled Ticket");
 					return true;
 				} else
@@ -131,14 +131,14 @@ public class Ui {
 
 	public String getAvailableTickets(String start, String end, Train train) {
 		try {
-			return bookingSoftware.getAvailableTickets(start, end, train);
+			return bookingHandler.getAvailableTickets(start, end, train);
 		} catch (Exception e) {
 			System.out.println(e);
 			return null;
 		}
 	}
 
-	// Overrides the ValidateTrain method of BookingSoftware because of taking
+	// Overrides the ValidateTrain method of BookingHandler because of taking
 	// inputs and if it is wrong it will ask again
 	private boolean validateTrainID() {
 		try {
@@ -147,7 +147,7 @@ public class Ui {
 				int trainId = trainIds.get(sno - 1);
 				if (trainId == -1)
 					break;
-				if (trainSoftware.validateTrainID(trainId)) {
+				if (trainHandler.validateTrainID(trainId)) {
 					return true;
 				} else {
 					System.out.print("\nPlease Enter Correct Id");
@@ -160,11 +160,11 @@ public class Ui {
 		}
 	}
 
-	// This Function will Print all TrainSoftware Available for the given start,
+	// This Function will Print all TrainHandler Available for the given start,
 	// destination and date.
 	protected boolean printTrains(String start, String end, String date) {
 		try {
-			ArrayList<Train> trains = trainSoftware.getTrains(start, end, date);
+			ArrayList<Train> trains = trainHandler.getTrains(start, end, date);
 			System.out.println(
 					"\n\n-----------------------------------------------------------------------------------------");
 			System.out.format("%1$-7s%2$-10s%3$-30s%4$-10s%5$-10s", "S.No", "Train No", "Train", "Time",
@@ -180,11 +180,11 @@ public class Ui {
 				if (endIndex != -1)
 					end = t.arrStNames.get(endIndex);
 				System.out.format("\n%1$-7s%2$-10s%3$-30s%4$-10s%5$-10s", ++i, t.id, t.name, t.time,
-						bookingSoftware.getAvailableTickets(start, end, t));
+						bookingHandler.getAvailableTickets(start, end, t));
 				trainIds.add(t.id);
 			}
 			if (trains.size() == 0) {
-				System.out.println("\nNo TrainSoftware Found...");
+				System.out.println("\nNo TrainHandler Found...");
 			}
 			System.out.println(
 					"\n-----------------------------------------------------------------------------------------\n");
@@ -204,10 +204,10 @@ public class Ui {
 			System.out.println(
 					"\n------------------------------------------------------------------------------------------------------------------------------\n");
 			for (Long p : myTickets) {
-				Ticket ticket = bookingSoftware.getTicket(p);
-				Train train = trainSoftware.getTrain(ticket.train);
+				Ticket ticket = bookingHandler.getTicket(p);
+				Train train = trainHandler.getTrain(ticket.train);
 				Station start = train.arrStations.get(train.arrStNames.indexOf(ticket.fromStation));
-				User user = login.getUser(ticket.user);
+				User user = loginHandler.getUser(ticket.user);
 				System.out.format("%1$-17s%2$-25s%3$-5s%4$-20s%5$-20s%6$-15s%7$-10s%8$-5s", ticket.pnr, user.name,
 						user.age, ticket.fromStation, ticket.toStation, start.departureDate, start.departureTime,
 						ticket.berth);
@@ -223,8 +223,8 @@ public class Ui {
 	// Function is Used to get Ticket and Print All Ticket Details.
 	private void printTicket(Ticket ticket) {
 		try {
-			Train train = trainSoftware.getTrain(ticket.train);
-			User user = login.getUser(ticket.user);
+			Train train = trainHandler.getTrain(ticket.train);
+			User user = loginHandler.getUser(ticket.user);
 			Station start = train.arrStations.get(train.arrStNames.indexOf(ticket.fromStation));
 			Station destination = train.arrStations.get(train.arrStNames.indexOf(ticket.toStation));
 			System.out.print(
@@ -255,8 +255,8 @@ public class Ui {
 	// valid
 	protected void printTicket(long id) {
 		try {
-			if (bookingSoftware.getTicket(id) != null)
-				printTicket(bookingSoftware.getTicket(id));
+			if (bookingHandler.getTicket(id) != null)
+				printTicket(bookingHandler.getTicket(id));
 			else
 				System.out.println("Please Enter the Valid PNR");
 		} catch (Exception e) {

@@ -1,4 +1,4 @@
-package backend;
+package handlers;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -9,13 +9,13 @@ import java.util.Collections;
 import entites.Station;
 import entites.Train;
 
-public class TrainSoftware {
+public class TrainHandler {
 
 	private Train currentTrain;
 	Database db = Database.getInstance();
 
-	// Creates a Train at start of the TrainSoftware
-	public TrainSoftware() {
+	// Creates a Train at start of the TrainHandler
+	public TrainHandler() {
 		if (db.getAvaTrains().isEmpty()) {
 			String[] arrStations = { "TENKASI", "SIVAKASI", "MADURAI", "DINDIGUL", "TIRUCHCHIRAPALLI",
 					"CHENNAI EGMORE" };
@@ -25,7 +25,7 @@ public class TrainSoftware {
 		}
 	}
 
-	// This Function is Used to Filter TrainSoftware available
+	// This Function is Used to Filter TrainHandler available
 	public ArrayList<Train> getTrains(String start, String destination, String date) {
 		ArrayList<Train> trains = new ArrayList<Train>();
 

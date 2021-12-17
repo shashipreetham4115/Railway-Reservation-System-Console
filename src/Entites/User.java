@@ -2,7 +2,7 @@ package entites;
 
 import java.util.ArrayList;
 
-import backend.Database;
+import handlers.Database;
 
 public class User {
 	private String password;
@@ -25,7 +25,7 @@ public class User {
 			myBookings = new ArrayList<>();
 	}
 
-	// This is function which helps the Login to verify Password of the User without
+	// This is function which helps the LoginHandler to verify Password of the User without
 	// returning the password
 	public String getPassword() {
 		return password;

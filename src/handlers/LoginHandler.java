@@ -1,17 +1,17 @@
-package backend;
+package handlers;
 
 import java.util.*;
 
 import entites.User;
 
-public class Login {
+public class LoginHandler {
 	private Database db = Database.getInstance();
 	private Map<String, Integer> usernames = db.getUsernames();
 	private Map<Integer, User> users = db.getUsers();
 	private User loggedInUser = db.getLoggedInUser();
 
 	// This Constructor creates 3 Users at start of the APP
-	public Login() {
+	public LoginHandler() {
 		User l1 = new User("p", "Shashipreetham", "Male", 21, "admin");
 		users.put(l1.id, l1);
 		usernames.put("shashi", l1.id);

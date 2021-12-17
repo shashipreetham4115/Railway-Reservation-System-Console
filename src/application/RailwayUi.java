@@ -24,11 +24,11 @@ public class RailwayUi extends Ui implements RailwayAppServices {
 	public String validateUser() {
 		try {
 			String username = Inputs.getString("Please Enter Your Username");
-			if (login.isUsernameAvailable(username))
+			if (loginHandler.isUsernameAvailable(username))
 				System.out.println("\nIncorrect Username");
 			else {
 				String password = Inputs.getString("Please Enter Your Password");
-				String userType = login.validateUser(username, password);
+				String userType = loginHandler.validateUser(username, password);
 				if (userType != null && userType.equals("admin")) {
 					greetUser();
 					return userType;
@@ -47,16 +47,16 @@ public class RailwayUi extends Ui implements RailwayAppServices {
 	// This function is used to print all passengers in given train id
 	public void printPassengers() {
 		try {
-			if (trainSoftware.validateTrainID(Inputs.getInt("Please Enter Your Train Id"))) {
-				if (trainSoftware.getCurrentTrain().cnfList.size() == 0) {
-					System.out.println("No BookingSoftware done till now");
+			if (trainHandler.validateTrainID(Inputs.getInt("Please Enter Your Train Id"))) {
+				if (trainHandler.getCurrentTrain().cnfList.size() == 0) {
+					System.out.println("No BookingHandler done till now");
 					return;
 				}
 
 				ArrayList<Long> tickets = new ArrayList<>();
-				tickets.addAll(trainSoftware.getCurrentTrain().cnfList);
-				tickets.addAll(trainSoftware.getCurrentTrain().racWaitingList);
-				tickets.addAll(trainSoftware.getCurrentTrain().waitingList);
+				tickets.addAll(trainHandler.getCurrentTrain().cnfList);
+				tickets.addAll(trainHandler.getCurrentTrain().racWaitingList);
+				tickets.addAll(trainHandler.getCurrentTrain().waitingList);
 
 				if (tickets.size() > 0) {
 					System.out.println(tickets.size());
@@ -71,7 +71,7 @@ public class RailwayUi extends Ui implements RailwayAppServices {
 		}
 	}
 
-	// This function Overrides AddTrain of BookingSoftware Software to take all
+	// This function Overrides AddTrain of BookingHandler Software to take all
 	// inputs
 	// required and then calls that function
 	public void addTrain() {
@@ -100,7 +100,7 @@ public class RailwayUi extends Ui implements RailwayAppServices {
 			}
 			arrStations[stops] = destination;
 			arrCodes[stops] = destinationCode;
-			printTrain(trainSoftware.addTrain(trainNo, name, start, destination, date, time, arrStations, arrCodes,
+			printTrain(trainHandler.addTrain(trainNo, name, start, destination, date, time, arrStations, arrCodes,
 					SeatsPerComp, totalComp));
 			System.out.println("Sucessfully Added...");
 		} catch (Exception e) {
@@ -138,7 +138,7 @@ public class RailwayUi extends Ui implements RailwayAppServices {
 		}
 	}
 
-	// Overrides the PrintTicket of TrainSoftware class to get input and then calls
+	// Overrides the PrintTicket of TrainHandler class to get input and then calls
 	// that
 	// function
 	public void printTicket() {
@@ -153,8 +153,8 @@ public class RailwayUi extends Ui implements RailwayAppServices {
 	// inputs i.e train id.
 	public void getChart() {
 		try {
-			if (trainSoftware.validateTrainID(Inputs.getInt("Please Enter Your Train Id"))) {
-				printAllTickets(bookingSoftware.prepareChart(trainSoftware.getCurrentTrain()));
+			if (trainHandler.validateTrainID(Inputs.getInt("Please Enter Your Train Id"))) {
+				printAllTickets(bookingHandler.prepareChart(trainHandler.getCurrentTrain()));
 			} else
 				System.out.println("\nPlease Enter Valid Train Id");
 		} catch (Exception e) {
