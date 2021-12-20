@@ -46,7 +46,7 @@ public class TrainHandler {
 		return trains;
 	}
 
-	public static String getNextStopArraivalTimeAndDate(String preDate, String preTime) {
+	public String getNextStopArraivalTimeAndDate(String preDate, String preTime) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
 		LocalTime time = LocalTime.parse(preTime, formatter);
 		float randomKms = (float) (Math.random() * 80) + 70;
@@ -66,7 +66,7 @@ public class TrainHandler {
 		return newTime + "&" + newDate;
 	}
 
-	public static String getTimeAndDateAfter5Mins(String preDate, String preTime) {
+	public String getTimeAndDateAfter5Mins(String preDate, String preTime) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
 		LocalTime time = LocalTime.parse(preTime, formatter);
 		time = time.plusMinutes(5);

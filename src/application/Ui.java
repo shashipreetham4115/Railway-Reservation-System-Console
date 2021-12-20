@@ -184,7 +184,7 @@ public class Ui {
 				trainIds.add(t.id);
 			}
 			if (trains.size() == 0) {
-				System.out.println("\nNo TrainHandler Found...");
+				System.out.println("\nNo Trains Found...");
 			}
 			System.out.println(
 					"\n-----------------------------------------------------------------------------------------\n");
