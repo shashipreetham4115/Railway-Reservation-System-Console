@@ -14,4 +14,8 @@ public interface BookingServices {
 
 	boolean cancelTicket(long id);
 
+	public Ticket getTicket(long id);
+
+	public String getAvailableTickets(String start, String end, Train train);
+
 }

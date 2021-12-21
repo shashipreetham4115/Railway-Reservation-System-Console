@@ -3,8 +3,9 @@ package handlers;
 import java.util.*;
 
 import entites.User;
+import interfaces.LoginServices;
 
-public class LoginHandler {
+public class LoginHandler implements LoginServices {
 	private Database db = Database.getInstance();
 	private Map<String, Integer> usernames = db.getUsernames();
 	private Map<Integer, User> users = db.getUsers();

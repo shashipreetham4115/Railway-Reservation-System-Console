@@ -1,12 +1,14 @@
 package application;
 
+import interfaces.RailwayAppServices;
+import interfaces.UserAppServices;
 import utilities.InputsUtil;
 
 public class Main {
 	public static void main(String[] args) {
 		String userType = "";
-		RailwayUi ra = new RailwayUi();
-		UserUi ua = new UserUi();
+		RailwayAppServices ra = new RailwayUi();
+		UserAppServices ua = new UserUi();
 
 		while (true) {
 			while (userType == "") {

@@ -1,10 +1,14 @@
 package interfaces;
 
- public interface RailwayAppServices extends AppServices{
+public interface RailwayAppServices extends AppServices {
 
-	 void printPassengers();
+	void printPassengers();
 
-	 void printTicket();
+	void printTicket();
 
-	 void getChart();
+	void getChart();
+
+	void addNewUser();
+
+	void addTrain();
 }

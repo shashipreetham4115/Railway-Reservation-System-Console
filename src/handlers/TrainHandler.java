@@ -8,8 +8,9 @@ import java.util.Collections;
 
 import entites.Station;
 import entites.Train;
+import interfaces.TrainServices;
 
-public class TrainHandler {
+public class TrainHandler implements TrainServices {
 
 	private Train currentTrain;
 	Database db = Database.getInstance();
@@ -44,41 +45,6 @@ public class TrainHandler {
 		}
 
 		return trains;
-	}
-
-	public String getNextStopArraivalTimeAndDate(String preDate, String preTime) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
-		LocalTime time = LocalTime.parse(preTime, formatter);
-		float randomKms = (float) (Math.random() * 80) + 70;
-		float avgSpeed = 60f;
-		int hours = (int) (randomKms / avgSpeed);
-		int mins = (int) (((randomKms / avgSpeed) - hours) * 60);
-		time = time.plusMinutes(mins);
-		time = time.plusHours(hours);
-		String newTime = time.format(formatter);
-		String newDate = preDate;
-		if (preTime.split(" ")[1].equals("PM") && newTime.split(" ")[1].equals("AM")) {
-			DateTimeFormatter ft = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-			LocalDate date = LocalDate.parse(preDate, ft);
-			date.plusDays(1);
-			newDate = date.plusDays(1).format(ft);
-		}
-		return newTime + "&" + newDate;
-	}
-
-	public String getTimeAndDateAfter5Mins(String preDate, String preTime) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
-		LocalTime time = LocalTime.parse(preTime, formatter);
-		time = time.plusMinutes(5);
-		String newTime = time.format(formatter);
-		String newDate = preDate;
-		if (preTime.split(" ")[1].equals("PM") && newTime.split(" ")[1].equals("AM")) {
-			DateTimeFormatter ft = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-			LocalDate date = LocalDate.parse(preDate, ft);
-			date.plusDays(1);
-			newDate = date.plusDays(1).format(ft);
-		}
-		return newTime + "&" + newDate;
 	}
 
 	// This Function is used to validate date a Train id given while booking ticket
@@ -125,6 +91,41 @@ public class TrainHandler {
 
 	public Train getCurrentTrain() {
 		return currentTrain;
+	}
+
+	private String getNextStopArraivalTimeAndDate(String preDate, String preTime) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
+		LocalTime time = LocalTime.parse(preTime, formatter);
+		float randomKms = (float) (Math.random() * 80) + 70;
+		float avgSpeed = 60f;
+		int hours = (int) (randomKms / avgSpeed);
+		int mins = (int) (((randomKms / avgSpeed) - hours) * 60);
+		time = time.plusMinutes(mins);
+		time = time.plusHours(hours);
+		String newTime = time.format(formatter);
+		String newDate = preDate;
+		if (preTime.split(" ")[1].equals("PM") && newTime.split(" ")[1].equals("AM")) {
+			DateTimeFormatter ft = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			LocalDate date = LocalDate.parse(preDate, ft);
+			date.plusDays(1);
+			newDate = date.plusDays(1).format(ft);
+		}
+		return newTime + "&" + newDate;
+	}
+
+	private String getTimeAndDateAfter5Mins(String preDate, String preTime) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
+		LocalTime time = LocalTime.parse(preTime, formatter);
+		time = time.plusMinutes(5);
+		String newTime = time.format(formatter);
+		String newDate = preDate;
+		if (preTime.split(" ")[1].equals("PM") && newTime.split(" ")[1].equals("AM")) {
+			DateTimeFormatter ft = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			LocalDate date = LocalDate.parse(preDate, ft);
+			date.plusDays(1);
+			newDate = date.plusDays(1).format(ft);
+		}
+		return newTime + "&" + newDate;
 	}
 
 }

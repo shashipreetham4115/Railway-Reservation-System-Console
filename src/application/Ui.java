@@ -9,15 +9,18 @@ import entites.User;
 import handlers.BookingHandler;
 import handlers.LoginHandler;
 import handlers.TrainHandler;
+import interfaces.BookingServices;
+import interfaces.LoginServices;
+import interfaces.TrainServices;
 import utilities.InputsUtil;
 import utilities.ValidateInputUtil;
 
 public class Ui {
 
 	Scanner sc = new Scanner(System.in);
-	LoginHandler loginHandler = new LoginHandler();
-	TrainHandler trainHandler = new TrainHandler();
-	BookingHandler bookingHandler = new BookingHandler();
+	LoginServices loginHandler = new LoginHandler();
+	TrainServices trainHandler = new TrainHandler();
+	BookingServices bookingHandler = new BookingHandler();
 	private ArrayList<Integer> trainIds = new ArrayList<>();
 
 	// This Function is used to Add new User

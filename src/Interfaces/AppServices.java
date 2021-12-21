@@ -4,12 +4,10 @@ public interface AppServices {
 
 	void bookTicket(String role);
 
-	boolean cancelTicket(Long ticketId);
+	void cancelTicket();
 
 	String validateUser();
 
 	void changePassword();
-
-	void addNewUser(String role);
 
 }
