@@ -3,185 +3,209 @@ package application;
 import java.util.*;
 
 import entites.Station;
+import entites.Ticket;
 import entites.Train;
-import interfaces.RailwayAppServices;
+import entites.User;
+import handlers.BookingHandler;
+import handlers.LoginHandler;
+import handlers.TrainHandler;
+import interfaces.BookingServices;
+import interfaces.LoginServices;
+import interfaces.TrainServices;
 import utilities.InputsUtil;
 import utilities.ValidateInputUtil;
 
-public class RailwayUi extends Ui implements RailwayAppServices {
-	Scanner sc = new Scanner(System.in);
+public class RailwayUi {
 
-	public void cancelTicket() {
+	LoginServices loginHandler = new LoginHandler();
+	TrainServices trainHandler = new TrainHandler();
+	BookingServices bookingHandler = new BookingHandler();
+	private ArrayList<Integer> trainIds = new ArrayList<>();
+
+	public void bookTicket(String role) {
 		try {
-			long ticketId = InputsUtil.getLong("Please Enter PNR");
-			cancelTicket(ticketId);
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-	}
-
-	// This function validates the user by taking username and password
-	public String validateUser() {
-		try {
-			String username = InputsUtil.getString("Please Enter Your Username");
-			if (loginHandler.isUsernameAvailable(username))
-				System.out.println("\nIncorrect Username");
-			else {
-				String password = InputsUtil.getString("Please Enter Your Password");
-				String userType = loginHandler.validateUser(username, password);
-				if (userType != null && userType.equals("admin")) {
-					greetUser();
-					return userType;
-				} else if (userType != null && userType.equals("user"))
-					System.out.println("Invalid Username or Password");
-				else
-					System.out.println("\nIncorrect Password");
-			}
-			return "";
-		} catch (Exception e) {
-			System.out.println(e);
-			return "";
-		}
-	}
-
-	// This function is used to print all passengers in given train id
-	public void printPassengers() {
-		try {
-			if (trainHandler.validateTrainID(InputsUtil.getInt("Please Enter Your Train Id"))) {
-				if (trainHandler.getCurrentTrain().cnfList.size() == 0) {
-					System.out.println("No BookingHandler done till now");
-					return;
-				}
-
-				ArrayList<Long> tickets = new ArrayList<>();
-				tickets.addAll(trainHandler.getCurrentTrain().cnfList);
-				tickets.addAll(trainHandler.getCurrentTrain().racWaitingList);
-				tickets.addAll(trainHandler.getCurrentTrain().waitingList);
-
-				if (tickets.size() > 0) {
-					System.out.println(tickets.size());
-					printAllTickets(tickets);
-				} else {
-					System.out.println("No Ticket Booked till Now");
-				}
-			} else
-				System.out.println("\nPlease Enter Valid Train Id");
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-	}
-
-	// This function Overrides AddTrain of BookingHandler Software to take all
-	// inputs
-	// required and then calls that function
-	public void addTrain() {
-		try {
-			int trainNo = InputsUtil.getInt("Please Enter Train No");
-			String name = InputsUtil.getLine("Please Enter Train Name").toUpperCase();
-			String start = InputsUtil.getLine("Please Enter Start Station").toUpperCase();
-			String startCode = InputsUtil.getLine("Please Enter Start Station Code").toUpperCase();
-			String destination = InputsUtil.getLine("Please Enter Destination").toUpperCase();
-			String destinationCode = InputsUtil.getLine("Please Enter Destination Station Code").toUpperCase();
+			String start = InputsUtil.getLine("Enter From Station").toUpperCase();
+			String end = InputsUtil.getLine("Enter To Station").toUpperCase();
 			String date = ValidateInputUtil.getDate();
-			String time = ValidateInputUtil.getTime();
-			int totalComp = ValidateInputUtil.getCompartment();
-			int SeatsPerComp = ValidateInputUtil.getValidSeatsPerComp();
-			int stops = InputsUtil.getInt("Please Enter how many stops are there");
-			String[] arrStations = new String[stops + 1];
-			String[] arrCodes = new String[stops + 1];
-			sc.nextLine();
-			arrStations[0] = start;
-			arrCodes[0] = startCode;
-			for (int i = 1; i <= stops; i++) {
-				System.out.print("\nPlease Enter " + i + "Stop      : ");
-				arrStations[i] = sc.nextLine().toUpperCase();
-				System.out.print("\nPlease Enter " + i + "Stop Code :");
-				arrCodes[i] = sc.nextLine().toUpperCase();
+			Ticket t = null;
+			if (printTrains(start, end, date))
+				if (validateTrainID()) {
+					Train train = trainHandler.getCurrentTrain();
+					int startIndex = train.arrStCodes.indexOf(start);
+					int endIndex = train.arrStCodes.indexOf(end);
+					if (startIndex != -1)
+						start = train.arrStNames.get(startIndex);
+					if (endIndex != -1)
+						end = train.arrStNames.get(endIndex);
+					String pb = ValidateInputUtil.getPreferedBerth();
+					User u;
+					if (role.equals("User")) {
+						u = loginHandler.getLoggedInUser();
+						t = bookingHandler.bookTicket(u, start, end, pb, trainHandler.getCurrentTrain());
+					} else {
+						u = new User(InputsUtil.getLine("Please Enter Name"), ValidateInputUtil.getGender(),
+								ValidateInputUtil.getAge());
+						t = bookingHandler.bookTicket(u, start, end, pb, trainHandler.getCurrentTrain());
+					}
+				} else
+					return;
+			else
+				return;
+			if (t == null) {
+				System.out.print("Tickets Not Available");
+			} else {
+				printTicket(t);
+				System.out.print("\n Ticket Booked Sucessfully");
 			}
-			arrStations[stops] = destination;
-			arrCodes[stops] = destinationCode;
-			printTrain(trainHandler.addTrain(trainNo, name, start, destination, date, time, arrStations, arrCodes,
-					SeatsPerComp, totalComp));
-			System.out.println("Sucessfully Added...");
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 	}
 
-	private void printTrain(Train t) {
+	// This Function Overrides the CancelTicket method in BookingHandler SOftware
+	// and after taking a valid ticket id it will call Cancel Ticket function in
+	// booking software
+	public boolean cancelTicket(Long ticketId) {
 		try {
-			System.out.print(
-					"\n----------------------------------------------------------------------------------------------------------------------------------\n");
-			System.out.print("\nTrain No            : " + t.id);
-			System.out.print("\nTrain Name          : " + t.name);
-			System.out.print("\nStart Station       : " + t.start);
-			System.out.print("\nDestination Station : " + t.destination);
-			System.out.print(
-					"\n-----------------------------------------------------------------------------------------------------------------------------------\n");
-			System.out.print(
-					"\n------------------------------------------------------------Stops------------------------------------------------------------------\n");
-			System.out.print(
-					"\n-----------------------------------------------------------------------------------------------------------------------------------\n");
-			System.out.format("%1$-20s%2$-20s%3$-20s%4$-20s%5$-20s%6$-20s", "Station Name", "Station Code",
-					"Arrival Date", "Arrival Time", "Departure Date", "Departure Time");
-			System.out.print(
-					"\n-----------------------------------------------------------------------------------------------------------------------------------\n");
-			for (Station s : t.arrStations) {
-				System.out.format("\n%1$-20s%2$-20s%3$-20s%4$-20s%5$-20s%6$-20s\n", s.name, s.code, s.arrivalDate,
-						s.arrivalTime, s.departureDate, s.departureTime);
-			}
-
-			System.out.print(
-					"\n-----------------------------------------------------------------------------------------------------------------------------------\n");
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-	}
-
-	// Overrides the PrintTicket of TrainHandler class to get input and then calls
-	// that
-	// function
-	public void printTicket() {
-		try {
-			printTicket(InputsUtil.getLong("Please Enter PNR"));
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-	}
-
-	// get Chart is function where final chart prepared is printed after taking all
-	// inputs i.e train id.
-	public void getChart() {
-		try {
-			if (trainHandler.validateTrainID(InputsUtil.getInt("Please Enter Your Train Id"))) {
-				printAllTickets(bookingHandler.prepareChart(trainHandler.getCurrentTrain()));
+			if (bookingHandler.getTicket(ticketId) != null) {
+				if (bookingHandler.cancelTicket(ticketId)) {
+					System.out.println("\nSuccessfully Canceled Ticket");
+					return true;
+				} else
+					System.out.println("\nFailed To Cancel Your Ticket Please Try Again");
 			} else
-				System.out.println("\nPlease Enter Valid Train Id");
+				System.out.println("\n Please Enter Valid PNR");
+			return false;
 		} catch (Exception e) {
 			System.out.println(e);
+			return false;
 		}
 	}
 
-	public void addNewUser() {
+	// Overrides the ValidateTrain method of BookingHandler because of taking
+	// inputs and if it is wrong it will ask again
+	private boolean validateTrainID() {
 		try {
 			while (true) {
-				switch (InputsUtil.getInt("1) Admin \n2) User \n3) Back \nPlease Choose User Role")) {
-				case 1: {
-					addNewUser("admin");
+				int sno = InputsUtil.getInt("Please Enter S.No from Above List or enter -1 to exit");
+				int trainId = trainIds.get(sno - 1);
+				if (trainId == -1)
 					break;
-				}
-				case 2: {
-					addNewUser("user");
-					break;
-				}
-				case 3:
-					return;
-				default:
-					System.out.println("Please Enter Valid Option");
+				if (trainHandler.validateTrainID(trainId)) {
+					return true;
+				} else {
+					System.out.print("\nPlease Enter Correct Id");
 				}
 			}
+			return false;
+		} catch (Exception e) {
+			System.out.println(e);
+			return false;
+		}
+	}
+
+	// This Function will Print all TrainHandler Available for the given start,
+	// destination and date.
+	protected boolean printTrains(String start, String end, String date) {
+		try {
+			ArrayList<Train> trains = trainHandler.getTrains(start, end, date);
+			System.out.println(
+					"\n\n-----------------------------------------------------------------------------------------");
+			System.out.format("%1$-7s%2$-10s%3$-30s%4$-10s%5$-10s", "S.No", "Train No", "Train", "Time",
+					"Available Seats");
+			System.out.println(
+					"\n-----------------------------------------------------------------------------------------");
+			int i = 0;
+			for (Train t : trains) {
+				int startIndex = t.arrStCodes.indexOf(start);
+				int endIndex = t.arrStCodes.indexOf(end);
+				if (startIndex != -1)
+					start = t.arrStNames.get(startIndex);
+				if (endIndex != -1)
+					end = t.arrStNames.get(endIndex);
+				System.out.format("\n%1$-7s%2$-10s%3$-30s%4$-10s%5$-10s", ++i, t.id, t.name, t.time,
+						bookingHandler.getAvailableTickets(start, end, t));
+				trainIds.add(t.id);
+			}
+			if (trains.size() == 0) {
+				System.out.println("\nNo Trains Found...");
+			}
+			System.out.println(
+					"\n-----------------------------------------------------------------------------------------\n");
+			return trains.size() != 0;
+		} catch (Exception e) {
+			System.out.println(e);
+			return false;
+		}
+	}
+
+	protected void printAllTickets(ArrayList<Long> myTickets) {
+		try {
+			System.out.println(
+					"\n------------------------------------------------------------------------------------------------------------------------------");
+			System.out.format("%1$-17s%2$-25s%3$-5s%4$-20s%5$-20s%6$-15s%7$-10s%8$-5s", "PNR", "Name", "Age", "From",
+					"To", "Date", "Time", "Status/berth");
+			System.out.println(
+					"\n------------------------------------------------------------------------------------------------------------------------------\n");
+			for (Long p : myTickets) {
+				Ticket ticket = bookingHandler.getTicket(p);
+				Train train = trainHandler.getTrain(ticket.train);
+				Station start = train.arrStations.get(train.arrStNames.indexOf(ticket.fromStation));
+				User user = loginHandler.getUser(ticket.user);
+				System.out.format("%1$-17s%2$-25s%3$-5s%4$-20s%5$-20s%6$-15s%7$-10s%8$-5s", ticket.pnr, user.name,
+						user.age, ticket.fromStation, ticket.toStation, start.departureDate, start.departureTime,
+						ticket.berth);
+				System.out.println();
+			}
+			System.out.println(
+					"\n------------------------------------------------------------------------------------------------------------------------------\n");
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 	}
+
+	// Function is Used to get Ticket and Print All Ticket Details.
+	private void printTicket(Ticket ticket) {
+		try {
+			Train train = trainHandler.getTrain(ticket.train);
+			User user = loginHandler.getUser(ticket.user);
+			Station start = train.arrStations.get(train.arrStNames.indexOf(ticket.fromStation));
+			Station destination = train.arrStations.get(train.arrStNames.indexOf(ticket.toStation));
+			System.out.print(
+					"\n-----------------------------------------------------------------------------------------------------------------------------------\n");
+			System.out.print(
+					"-------------------------------------------------------Ticket Details--------------------------------------------------------------");
+			System.out.print(
+					"\n-----------------------------------------------------------------------------------------------------------------------------------\n");
+			System.out.format("\n%1$-30s%2$-35s%3$-30s%4$-30s\n", "Passenger Name    :", user.name,
+					"Passenger Age       :", user.age);
+			System.out.format("\n%1$-30s%2$-35s%3$-30s%4$-30s\n", "Ticket PNR        :", ticket.pnr,
+					"Allocated Berth     :", ticket.berth);
+			System.out.format("\n%1$-30s%2$-35s%3$-30s%4$-30s\n", "Train No          :", train.id,
+					"Train Name          :", train.name);
+			System.out.format("\n%1$-30s%2$-35s%3$-30s%4$-30s\n", "Boarding At       :", start.name,
+					"Scheduled Departure :", start.departureDate + " " + start.departureTime);
+			System.out.format("\n%1$-30s%2$-35s%3$-30s%4$-30s\n", "Reservation Up to :", destination.name,
+					"Scheduled Arrival   :", destination.arrivalDate + " " + destination.arrivalTime);
+			System.out.print(
+					"\n-----------------------------------------------------------------------------------------------------------------------------------\n");
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+
+	// This Function Overloads the PrintTicket Function because before calling print
+	// ticket it will verify the given ticket id and then it call if ticket id is
+	// valid
+	protected void printTicket(long id) {
+		try {
+			if (bookingHandler.getTicket(id) != null)
+				printTicket(bookingHandler.getTicket(id));
+			else
+				System.out.println("Please Enter the Valid PNR");
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+
 }

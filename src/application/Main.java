@@ -1,24 +1,25 @@
 package application;
 
-import interfaces.RailwayAppServices;
-import interfaces.UserAppServices;
+import interfaces.AdminServices;
+import interfaces.UserServices;
 import utilities.InputsUtil;
 
 public class Main {
 	public static void main(String[] args) {
 		String userType = "";
-		RailwayAppServices ra = new RailwayUi();
-		UserAppServices ua = new UserUi();
+		AdminServices ra = new AdminUi();
+		UserServices ua = new UserUi();
+		LoginUi la = new LoginUi();
 
 		while (true) {
 			while (userType == "") {
 				switch (InputsUtil.getInt("1) Admin \n2) User \nPlease Choose Your Role ")) {
 				case 1: {
-					userType = ra.validateUser();
+					userType = la.validateAdmin();
 					break;
 				}
 				case 2: {
-					userType = ua.validateUser();
+					userType = la.validateUser();
 					break;
 				}
 				default:
@@ -68,7 +69,7 @@ public class Main {
 					break;
 				}
 				case 8: {
-					ra.changePassword();
+					la.changePassword();
 					break;
 				}
 				case 9: {
@@ -116,7 +117,7 @@ public class Main {
 					break;
 				}
 				case 6: {
-					ra.changePassword();
+					la.changePassword();
 					break;
 				}
 				case 7: {

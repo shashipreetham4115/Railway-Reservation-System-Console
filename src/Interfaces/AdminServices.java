@@ -1,6 +1,6 @@
 package interfaces;
 
-public interface RailwayAppServices extends AppServices {
+public interface AdminServices extends RailwayServices {
 
 	void printPassengers();
 

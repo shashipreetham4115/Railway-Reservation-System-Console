@@ -1,6 +1,6 @@
 package interfaces;
 
-public interface UserAppServices extends AppServices {
+public interface UserServices extends RailwayServices {
 
 	void myBookings();
 
