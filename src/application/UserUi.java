@@ -46,7 +46,7 @@ public class UserUi extends Ui implements UserAppServices {
 			ArrayList<Long> myTickets = loginHandler.getLoggedInUser().myBookings;
 
 			if (myTickets.isEmpty()) {
-				System.out.println("No BookingHandler done till now");
+				System.out.println("No Bookings done till now");
 				return;
 			}
 

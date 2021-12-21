@@ -129,15 +129,6 @@ public class Ui {
 		}
 	}
 
-	public String getAvailableTickets(String start, String end, Train train) {
-		try {
-			return bookingHandler.getAvailableTickets(start, end, train);
-		} catch (Exception e) {
-			System.out.println(e);
-			return null;
-		}
-	}
-
 	// Overrides the ValidateTrain method of BookingHandler because of taking
 	// inputs and if it is wrong it will ask again
 	private boolean validateTrainID() {
